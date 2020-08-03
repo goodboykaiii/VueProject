@@ -1,0 +1,41 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whk.dao.UserDAO">
+
+    <!--查询所有的功能-->
+    <select id="findAll" resultType="User">
+        select id,name,age,salary,phoneCode from t_user
+    </select>
+
+    <!--保存用户-->
+    <insert id="save" parameterType="User">
+        insert into t_user values(#{id},#{name},#{age},#{salary},#{phoneCode})
+    </insert>
+    
+    <!--删除用户信息-->
+    <delete id="delete" parameterType="String">
+        delete from t_user where id = #{id}
+    </delete>
+
+    <!--根据id查询一个用户-->
+    <select id="findOne" parameterType="String" resultType="User">
+        select id,name,age,salary,phoneCode from t_user where id = #{id}
+    </select>
+
+    <!--修改用户信息-->
+    <update id="update" parameterType="User">
+        update t_user set name = #{name},age = #{age},salary = #{salary},phoneCode = #{phoneCode} where id = #{id}
+    </update>
+
+    <!--处理模糊搜索-->
+    <select id="findNameOrPhoneCode" resultType="User">
+        select id,name,age,salary,phoneCode from t_user
+        <where>
+            <if test="name!=''">
+                name like concat(#{name},'%')
+            </if>
+            <if test="phoneCode!=''">
+                or phoneCode like concat('%',#{phoneCode},'%')
+            </if>
+        </where>
+    </select>
+</mapper>
